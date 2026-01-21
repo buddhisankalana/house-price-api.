@@ -11,6 +11,6 @@ class HousePredictionInput(BaseModel):
 
 @app.post("/predict")
 def predict_price(item: HousePredictionInput):
-    estimated_price = (item.land_size_sqft * 200) + (item.number_of_rooms * 15000) + \
+    estimated_price = (item.land_size_sqft * 200) + (item.number_of_rooms * 150000) + \
     (item.garage * 500000)
     return {"predicted_price": estimated_price}
