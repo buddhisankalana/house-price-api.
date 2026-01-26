@@ -14,7 +14,7 @@ def test_predict_standard_house():
        response = client.post("/predict",json=payload)
        assert response.status_code == 200
 
-       assert response.json()["predicted_price"] == 0.0
+       assert response.json()["predicted_price"] ==1170000.0
 
 def test_predict_mansion():
     # Scenario 2: A big house
