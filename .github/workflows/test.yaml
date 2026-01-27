@@ -1,11 +1,11 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on: [push]
 
 jobs:
+  # JOB 1: TEST THE CODE
   test-my-code:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -22,3 +22,20 @@ jobs:
       - name: Run Tests
         run: |
           pytest
+
+  # JOB 2: DEPLOY TO HUGGING FACE (Only if tests pass)
+  deploy-to-hf:
+    needs: test-my-code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Push to Hugging Face Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote add space https://buddhisankalana:$HF_TOKEN@huggingface.co/spaces/buddhisankalana/house-price-api
+          git push --force space main
