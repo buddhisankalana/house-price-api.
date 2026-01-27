@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
+@app.get("/")
+def read_root():
+     return{"message": "Welcome to the House Price Prediction API!"}
 
 class HousePredictionInput(BaseModel):
     number_of_rooms: int
