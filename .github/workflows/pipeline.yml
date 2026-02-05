@@ -25,12 +25,26 @@ jobs:
      - name: Run Tests
        run: pytest
 
- build-check:
+ build-and-push:
    needs: test-my-code
    runs-on: ubuntu-latest
+   permissions:
+     contents: read
+     packages: write
    steps:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Log in to Github container Registry
+        uses: docker/login-action@2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Build Docker Image
-        run: docker build -t house-price-api .                  
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest                 
